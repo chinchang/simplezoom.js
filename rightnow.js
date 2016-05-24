@@ -1,20 +1,31 @@
 (function () {
 	var snapDistance = 30;
-	var el, underlay, img, bound, W, H, isOutside = false;
+	var el, underlay, img, bound, W, H, isOutside = false, isOpen, isTouch;
 
 	function init() {
 		W = window.innerWidth;
 		H = window.innerHeight;
 		underlay = document.createElement('div');
-		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.4);');
+		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.7);');
 		document.body.appendChild(underlay);
 
 		img = document.createElement('img');
 		img.setAttribute('style', 'max-width: 98vw; position: fixed; left: 50%; top: 0%; transform: translate(0%, 0%); transition: transform 0.3s ease, opacity 0.4s ease; opacity: 0;pointer-events:none;');
 		document.body.appendChild(img);
 
-		document.addEventListener('mouseover', onMouseOver);
-		document.addEventListener('touchstart', onMouseOver);
+		try {
+			// Detect touch screen. Otherwise will throw err.
+			document.createEvent('TouchEvent');
+			img.style.transform = 'translate(-50%, -50%)';
+			img.style.left = '50%';
+			img.style.top = '50%';
+			img.style.maxWidth = (W) + 'px';
+
+			document.addEventListener('touchstart', onMouseOver);
+			isTouch = true;
+		} catch(e) {
+			document.addEventListener('mouseover', onMouseOver);
+		}
 	}
 
 	init();
@@ -22,34 +33,51 @@
 	function onMouseOver(e) {
 		el = e.target;
 
-		if (!el.tagName || el.tagName !== 'IMG' && el.tagName !== 'A') return;
+		if (isOpen && isTouch) {
+			isOpen = false;
+			reset();
+			return;
+		}
 
 		if (el.tagName === 'IMG') {
 			img.src = el.src;
 			img.style.opacity = 1;
-			img.style.transform = 'translate(0%, 0%) scale(1)';
 			underlay.style.opacity = 1;
-			img.style.top = '0px';
 
-			bound = el.getBoundingClientRect();
-			if (W - bound.right > bound.left) {
-				img.style.maxWidth = (W - bound.right) + 'px';
-				img.style.left = (bound.right) + 'px';
-			} else {
-				img.style.maxWidth = (bound.left) + 'px';
-				img.style.left = 0;
+			if (isTouch) {
+				img.style.transform = 'translate(-50%, -50%) scale(1)';
 			}
-
-			document.addEventListener('mousemove', onMove);
-			document.addEventListener('touchmove', onMove);
-			document.addEventListener('mouseout', onMouseOut);
+			else {
+				img.style.top = '0px';
+				img.style.transform = 'translate(0%, 0%) scale(1)';
+				bound = el.getBoundingClientRect();
+				if (W - bound.right > bound.left) {
+					img.style.maxWidth = (W - bound.right) + 'px';
+					img.style.left = (bound.right) + 'px';
+				} else {
+					img.style.maxWidth = (bound.left) + 'px';
+					img.style.left = 0;
+				}
+				document.addEventListener('mousemove', onMove);
+				document.addEventListener('mouseout', onMouseOut);
+			}
+			isOpen = true;
 		}
 	}
 
 	function getMouse(mouseEvent) {
 		if (!bound) return {};
 
-		var mouseX = mouseEvent.clientX, mouseY = mouseEvent.clientY;
+		var mouseX, mouseY;
+		if (isTouch) {
+			mouseEvent.preventDefault();
+			mouseX = mouseEvent.touches[0].pageX;
+			mouseY = mouseEvent.touches[0].pageY;
+		}
+		else {
+			mouseX = mouseEvent.clientX;
+			mouseY = mouseEvent.clientY;
+		}
 
 		// Snap mouse to boundaries if they go out of bound upto some distance
 		if (bound.left - mouseX > 0 && bound.left - mouseX < snapDistance) {
@@ -89,7 +117,12 @@
 		document.removeEventListener('mousemove', onMove);
 		document.removeEventListener('mouseout', onMouseOut);
 
-		img.style.transform = 'translate(0%, 0%) scale(0.9)';
+		if (isTouch) {
+			img.style.transform = 'translate(-50%, -50%) scale(1)';
+		}
+		else {
+			img.style.transform = 'translate(0%, 0%) scale(0.9)';
+		}
 	}
 
 	function onMouseOut(e) {
