@@ -1,11 +1,11 @@
 {
-  "name": "y",
+  "name": "righthere.js",
   "version": "0.1.0",
-  "description": "Preview links and images in place.",
-  "main": "rightnow.js",
+  "description": "Preview images in place.",
+  "main": "righthere.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Kushagra Gour",
   "license": "ISC"
 }
