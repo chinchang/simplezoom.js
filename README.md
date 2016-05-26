@@ -19,7 +19,7 @@ or
 Now include the library on your website:
 
 ```html
-<script rel="stylesheet" href="simplezoom.js"></script>
+<script src="simplezoom.js"></script>
 ```
 
 That is it! You have a super simple image previewer enabled on your website.

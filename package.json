@@ -1,13 +1,14 @@
 {
   "name": "simplezoom.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tiny JavaScript library to preview images, better way",
   "main": "simplezoom.js",
   "author": "Kushagra Gour",
   "license": "MIT",
   "keywords": [
-    "preview",
     "image",
+    "viewer",
+    "preview",
     "gallery",
     "zoom"
   ],
