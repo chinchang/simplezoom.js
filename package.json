@@ -1,6 +1,6 @@
 {
   "name": "simplezoom.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tiny JavaScript library to preview images, better way",
   "main": "simplezoom.js",
   "author": "Kushagra Gour",
