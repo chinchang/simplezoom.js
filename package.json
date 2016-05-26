@@ -1,11 +1,8 @@
 {
-  "name": "righthere.js",
+  "name": "simplezoom.js",
   "version": "0.1.0",
-  "description": "Preview images in place.",
-  "main": "righthere.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "A tiny JavaScript library to preview images, right here!",
+  "main": "simplezoom.js",
   "author": "Kushagra Gour",
-  "license": "ISC"
+  "license": "MIT"
 }

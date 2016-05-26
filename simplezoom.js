@@ -1,6 +1,7 @@
 (function () {
 	var snapDistance = 30;
-	var el, underlay, img, bound, W, H, isOutside = false, isOpen, isTouch;
+	var el, underlay, img, bound, W, H,
+		isOutside = false, isOpen, isTouch, hasMoved;
 
 	function init() {
 		W = window.innerWidth;
@@ -30,38 +31,58 @@
 
 	init();
 
+	function onTouchMove(e) {
+		hasMoved = true;
+	}
+	function onTouchEnd(e) {
+		document.removeEventListener('touchmove', onTouchMove);
+		document.removeEventListener('touchend', onTouchEnd);
+		// If it wasn't a swipe, open/close image
+		if (!hasMoved) {
+			if (isOpen) {
+				isOpen = false;
+				reset();
+			} else if (e.target.tagName === 'IMG') {
+				openImage(e.target);
+			}
+		}
+	}
+
+	function openImage(target) {
+		el = target;
+		img.src = el.src;
+		img.style.opacity = 1;
+		underlay.style.opacity = 1;
+
+		if (isTouch) {
+			img.style.transform = 'translate(-50%, -50%) scale(1)';
+		}
+		else {
+			img.style.top = '0px';
+			img.style.transform = 'translate(0%, 0%) scale(1)';
+			bound = el.getBoundingClientRect();
+			if (W - bound.right > bound.left) {
+				img.style.maxWidth = (W - bound.right) + 'px';
+				img.style.left = (bound.right) + 'px';
+			} else {
+				img.style.maxWidth = (bound.left) + 'px';
+				img.style.left = 0;
+			}
+			document.addEventListener('mousemove', onMove);
+			document.addEventListener('mouseout', onMouseOut);
+		}
+		isOpen = true;
+	}
+
 	function onMouseOver(e) {
 		el = e.target;
 
-		if (isOpen && isTouch) {
-			isOpen = false;
-			reset();
-			return;
-		}
-
-		if (el.tagName === 'IMG') {
-			img.src = el.src;
-			img.style.opacity = 1;
-			underlay.style.opacity = 1;
-
-			if (isTouch) {
-				img.style.transform = 'translate(-50%, -50%) scale(1)';
-			}
-			else {
-				img.style.top = '0px';
-				img.style.transform = 'translate(0%, 0%) scale(1)';
-				bound = el.getBoundingClientRect();
-				if (W - bound.right > bound.left) {
-					img.style.maxWidth = (W - bound.right) + 'px';
-					img.style.left = (bound.right) + 'px';
-				} else {
-					img.style.maxWidth = (bound.left) + 'px';
-					img.style.left = 0;
-				}
-				document.addEventListener('mousemove', onMove);
-				document.addEventListener('mouseout', onMouseOut);
-			}
-			isOpen = true;
+		if (isTouch) {
+			hasMoved = false;
+			document.addEventListener('touchmove', onTouchMove);
+			document.addEventListener('touchend', onTouchEnd);
+		} else if (el.tagName === 'IMG') {
+			openImage(el);
 		}
 	}
 
