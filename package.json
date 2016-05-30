@@ -1,9 +1,13 @@
 {
   "name": "simplezoom.js",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A tiny JavaScript library to preview images, better way",
   "main": "simplezoom.js",
-  "author": "Kushagra Gour",
+  "author": {
+    "name": "Kushagra Gour",
+    "email": "chinchang457@gmail.com",
+    "url": "http://kushagragour.in"
+  },
   "license": "MIT",
   "keywords": [
     "image",
@@ -13,11 +17,6 @@
     "zoom"
   ],
   "homepage": "http://kushagragour.in/simplezoom.js",
-  "author": {
-    "name": "Kushagra Gour",
-    "email": "chinchang457@gmail.com",
-    "url": "http://kushagragour.in"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/chinchang/simplezoom.js.git"
