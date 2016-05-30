@@ -1,4 +1,4 @@
-# simplezoom.css [![npm version](https://badge.fury.io/js/simplezoom.js.svg)](https://badge.fury.io/js/simplezoom.js)
+# simplezoom.js [![npm version](https://badge.fury.io/js/simplezoom.js.svg)](https://badge.fury.io/js/simplezoom.js)
 *A tiny JavaScript library to preview images, better way!*
 
 An image viewer library I wrote to implement a better and quicker user experience of viewing images on webpages. On a desktop, there is no click required at all - everything works on hover!

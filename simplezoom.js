@@ -1,3 +1,8 @@
+/**
+ * simplezoom.js
+ * Author: Kushagra Gour
+ * MIT Licensed
+ */
 (function () {
 	var snapDistance = 30;
 	var el, underlay, img, bound, W, H,
@@ -7,11 +12,11 @@
 		W = window.innerWidth;
 		H = window.innerHeight;
 		underlay = document.createElement('div');
-		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.7);');
+		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease 200ms; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.7);');
 		document.body.appendChild(underlay);
 
 		img = document.createElement('img');
-		img.setAttribute('style', 'max-width: 98vw; position: fixed; left: 50%; top: 0%; transform: translate(0%, 0%); transition: transform 0.3s ease, opacity 0.4s ease; opacity: 0;pointer-events:none;');
+		img.setAttribute('style', 'max-width: 98vw; position: fixed; left: 50%; top: 0%; transform: translate(0%, 0%); transition: transform 0.3s ease 200ms, opacity 0.4s ease 200ms; opacity: 0;pointer-events:none;');
 		document.body.appendChild(img);
 
 		try {
@@ -48,6 +53,30 @@
 		}
 	}
 
+	/**
+	 * Checks all 4 sides of target element which has max area available
+	 * for the image, maintaining the aspect ratio.
+	 * @return {string} Side which has max area.
+	 */
+	function getSideWithMaxArea() {
+		var aspectRatio = el.width / el.height;
+		var areas = {
+			top: (aspectRatio * bound.top) * bound.top,
+			bottom: (aspectRatio * (H - bound.bottom)) * (H - bound.bottom),
+			left: (bound.left / aspectRatio) * (bound.left),
+			right: ((W - bound.right) / aspectRatio) * (W - bound.right)
+		};
+
+		var maxArea = 0, maxSide;
+		for (var side in areas) {
+			if (areas[side] > maxArea) {
+				maxArea = areas[side];
+				maxSide = side;
+			}
+		}
+		return maxSide;
+	}
+
 	function openImage(target) {
 		el = target;
 		img.src = el.src;
@@ -61,11 +90,26 @@
 			img.style.top = '0px';
 			img.style.transform = 'translate(0%, 0%) scale(1)';
 			bound = el.getBoundingClientRect();
-			if (W - bound.right > bound.left) {
+
+			var side = getSideWithMaxArea();
+
+			if (side === 'top') {
+				img.style.maxHeight = (bound.top) + 'px';
+				img.style.maxWidth = 'none';
+				img.style.left = 0;
+				img.style.top = 0;
+			} else if (side === 'bottom') {
+				img.style.maxHeight = (H - bound.bottom) + 'px';
+				img.style.maxWidth = 'none';
+				img.style.left = 0;
+				img.style.top = bound.bottom + 'px';
+			} else if (side === 'right') {
 				img.style.maxWidth = (W - bound.right) + 'px';
+				img.style.maxHeight = 'none';
 				img.style.left = (bound.right) + 'px';
 			} else {
 				img.style.maxWidth = (bound.left) + 'px';
+				img.style.maxHeight = 'none';
 				img.style.left = 0;
 			}
 			document.addEventListener('mousemove', onMove);
@@ -160,6 +204,6 @@
 	window.addEventListener('resize', function() {
 		W = window.innerWidth;
 		H = window.innerHeight;
-	})
+	});
 
 })();
