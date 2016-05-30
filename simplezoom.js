@@ -12,11 +12,11 @@
 		W = window.innerWidth;
 		H = window.innerHeight;
 		underlay = document.createElement('div');
-		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.7);');
+		underlay.setAttribute('style', 'position: fixed; left:0; top:0; width:100vw; height: 100vh; transition: opacity 0.25s ease 200ms; opacity: 0; pointer-events:none; background: rgba(0,0,0,0.7);');
 		document.body.appendChild(underlay);
 
 		img = document.createElement('img');
-		img.setAttribute('style', 'max-width: 98vw; position: fixed; left: 50%; top: 0%; transform: translate(0%, 0%); transition: transform 0.3s ease, opacity 0.4s ease; opacity: 0;pointer-events:none;');
+		img.setAttribute('style', 'max-width: 98vw; position: fixed; left: 50%; top: 0%; transform: translate(0%, 0%); transition: transform 0.3s ease 200ms, opacity 0.4s ease 200ms; opacity: 0;pointer-events:none;');
 		document.body.appendChild(img);
 
 		try {
