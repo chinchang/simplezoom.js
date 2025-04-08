@@ -3,7 +3,7 @@
 
 An image viewer library I wrote to implement a better and quicker user experience of viewing images on webpages. On a desktop, there is no click required at all - everything works on hover!
 
-[Demo](http://kushagragour.in/simplezoom.js/)
+[Demo](https://webmaker.app/create/oRVQBhcYtL)
 
 ## Get Started
 
